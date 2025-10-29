@@ -1,13 +1,11 @@
 package edu.uga.cs.statecapitalquiz;
 
 public class QuizQuestion {
-    private int id;              // primary key for this relation
     private int quizId;          // foreign key to Quiz
     private int questionId;      // foreign key to Question
     private boolean isCorrect;   // whether answer was correct
 
     public QuizQuestion() {
-        id = -1;
         quizId = -1;
         questionId = -1;
         isCorrect = false;
@@ -17,13 +15,6 @@ public class QuizQuestion {
         this.quizId = quizId;
         this.questionId = questionId;
         this.isCorrect = isCorrect;
-    }
-
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getQuizId() {

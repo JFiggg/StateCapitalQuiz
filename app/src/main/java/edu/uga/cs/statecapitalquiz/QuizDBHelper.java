@@ -35,9 +35,11 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     public static final String QUESTIONS_COLUMN_ID = "_id";
     public static final String QUESTIONS_COLUMN_STATE = "state";
     public static final String QUESTIONS_COLUMN_CAPITAL = "capital";
+    public static final String QUESTIONS_COLUMN_WRONG_CAPITAL1 = "wrong_capital1";
+    public static final String QUESTIONS_COLUMN_WRONG_CAPITAL2 = "wrong_capital2";
+
 
     // Quiz Questions Relationship Table Columns.
-    public static final String QUIZ_QUESTIONS_COLUMN_ID = "_id";
     public static final String QUIZ_QUESTIONS_COLUMN_QUIZ_ID = "quiz";
     public static final String QUIZ_QUESTIONS_COLUMN_QUESTION_ID = "question";
     public static final String QUIZ_QUESTIONS_COLUMN_IS_CORRECT = "is_correct";
@@ -65,7 +67,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_QUIZ_QUESTIONS =
             "create table " + TABLE_QUIZ_QUESTIONS + " ("
-                    + QUIZ_QUESTIONS_COLUMN_QUIZ_ID + " INTEGER, "
+                    + QUIZ_QUESTIONS_COLUMN_QUIZ_ID + " INTEGER , "
                     + QUIZ_QUESTIONS_COLUMN_QUESTION_ID + " INTEGER, "
                     + QUIZ_QUESTIONS_COLUMN_IS_CORRECT + "INTEGER, "
                     + "FOREIGN KEY(" + QUIZ_QUESTIONS_COLUMN_QUIZ_ID + ") REFERENCES "
