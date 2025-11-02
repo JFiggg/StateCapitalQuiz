@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/textView2"
-        app:layout_constraintBottom_toTopOf="@id/button"
+        app:layout_constraintBottom_toTopOf="@id/start_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView"
@@ -31,23 +31,23 @@
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Let's start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintEnd_toStartOf="@id/review_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/review_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Results History"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button"
+        app:layout_constraintStart_toEndOf="@id/start_button"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

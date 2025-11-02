@@ -1,9 +1,15 @@
 package edu.uga.cs.statecapitalquiz;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+
+import java.util.Date;
 
 /**
  * This is a SQLiteOpenHelper class, which Android uses to create, upgrade, delete an SQLite database
@@ -19,6 +25,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "state_capital_quiz.db";
     private static final int DB_VERSION = 1;
+    private final Context context;
 
     // Define all names (strings) for tables.
     public static final String TABLE_QUIZZES = "quizzes";
@@ -79,8 +86,9 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     // Note that the constructor is private!
     // So, it can be called only from
     // this class, in the getInstance method.
-    private QuizDBHelper(Context context ) {
+    private QuizDBHelper(@Nullable Context context ) {
         super( context, DB_NAME, null, DB_VERSION );
+        this.context = context;
     }
 
     // Access method to the single instance of the class.
@@ -111,5 +119,21 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         db.execSQL( "drop table if exists " + TABLE_QUIZZES );
         onCreate( db );
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZZES + " upgraded" );
+    }
+
+    void addQuiz(Date date, int result, int questionsAnswered) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put("QUIZZES_COLUMN_DATE", date.toString());
+        cv.put("QUIZZES_COLUMN_RESULTS", result);
+        cv.put("QUIZZES_COLUMN_QUESTIONS_ANSWERED", questionsAnswered);
+        long result1 = db.insert(TABLE_QUIZZES, null, cv);
+        if (result1 == -1) {
+            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }
