@@ -24,7 +24,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     private static final String DEBUG_TAG = "CapitalQuizDBHelper";
 
     private static final String DB_NAME = "state_capital_quiz.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 5;
     private final Context context;
 
     // Define all names (strings) for tables.
@@ -69,7 +69,9 @@ public class QuizDBHelper extends SQLiteOpenHelper {
             "create table " + TABLE_QUESTIONS + " ("
                     + QUESTIONS_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + QUESTIONS_COLUMN_STATE + " TEXT, "
-                    + QUESTIONS_COLUMN_CAPITAL + " TEXT "
+                    + QUESTIONS_COLUMN_CAPITAL + " TEXT, "
+                    + QUESTIONS_COLUMN_WRONG_CAPITAL1 + " TEXT, "
+                    + QUESTIONS_COLUMN_WRONG_CAPITAL2 + " TEXT "
                     + ")";
 
     private static final String CREATE_QUIZ_QUESTIONS =
@@ -116,7 +118,9 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     // if the version will be bumped up, as we modify the database schema.
     @Override
     public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion ) {
-        db.execSQL( "drop table if exists " + TABLE_QUIZZES );
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUIZZES );
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUIZ_QUESTIONS);
         onCreate( db );
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZZES + " upgraded" );
     }

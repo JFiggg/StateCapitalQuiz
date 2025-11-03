@@ -7,11 +7,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,12 +57,10 @@ public class QuizFragment extends Fragment {
         ArrayList<String> randomStates = getStates(randomIds);
         ArrayList<ArrayList<String>> capitalAnswers = getCapitals(randomIds);
 
-
-
-
         quizItemViewPagerArrayList = new ArrayList<>();
 
         for (int i = 0; i < randomIds.size(); i++) {
+            Log.d("DEBUG", "randomStates: " + randomStates.get(i));
             QuizItemViewPager quizItemViewPager = new QuizItemViewPager(i+1, randomStates.get(i), capitalAnswers.get(i).get(0), capitalAnswers.get(i).get(1), capitalAnswers.get(i).get(2) );
             quizItemViewPagerArrayList.add(quizItemViewPager);
         }
@@ -137,6 +138,7 @@ public class QuizFragment extends Fragment {
                 capitals.add(cursor.getString(cursor.getColumnIndexOrThrow("capital")));
                 capitals.add(cursor.getString(cursor.getColumnIndexOrThrow("wrong_capital1")));
                 capitals.add(cursor.getString(cursor.getColumnIndexOrThrow("wrong_capital2")));
+                Collections.shuffle(capitals);
                 capitalAnswers.add(capitals);
             } while (cursor.moveToNext());
         }

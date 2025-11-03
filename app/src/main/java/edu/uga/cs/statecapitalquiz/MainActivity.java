@@ -1,6 +1,7 @@
 package edu.uga.cs.statecapitalquiz;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
         }
 
-
+        testQuery();
     }
 
     public void populateDB() {
         QuizDBHelper dbHelper = QuizDBHelper.getInstance(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {
-            InputStream is = getAssets().open("state_capitals.csv");
+            InputStream is = getAssets().open("state_capitals_updated.csv");
             CSVReader reader = new CSVReader(new InputStreamReader(is));
             String[] nextLine;
             reader.readNext();
@@ -76,7 +77,27 @@ public class MainActivity extends AppCompatActivity {
             db.close();
             Log.d("CSVLoader", "Database successfully populated from CSV!");
         } catch (Exception e) {
-            Log.e("CSVLoader", "Error loading CSV");
+            Log.e("CSVLoader", "Error loading CSV", e);
         }
+    }
+
+    private void testQuery() {
+        SQLiteDatabase db = QuizDBHelper.getInstance(this).getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + QuizDBHelper.TABLE_QUESTIONS, null);
+
+        Log.d("DEBUG", "Row count: " + cursor.getCount());
+
+        if (cursor.moveToFirst()) {
+            do {
+                String id = cursor.getString(cursor.getColumnIndexOrThrow("_id"));
+                String state = cursor.getString(cursor.getColumnIndexOrThrow("state"));
+                String capital = cursor.getString(cursor.getColumnIndexOrThrow("capital"));
+                Log.d("DEBUG", "Row -> id: " + id + ", state: " + state + ", capital: " + capital);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
     }
 }

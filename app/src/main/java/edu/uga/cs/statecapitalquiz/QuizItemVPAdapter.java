@@ -30,10 +30,11 @@ public class QuizItemVPAdapter extends RecyclerView.Adapter<QuizItemVPAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         QuizItemViewPager quizItemViewPager = quizItemViewPagerArrayList.get(position);
-        holder.questionText.setText((CharSequence) quizItemViewPager.questionText);
-        holder.radioButton1.setText((CharSequence) quizItemViewPager.radioButton1);
-        holder.radioButton2.setText((CharSequence) quizItemViewPager.radioButton2);
-        holder.radioButton3.setText((CharSequence) quizItemViewPager.radioButton3);
+        holder.questionNumber.setText(quizItemViewPager.questionNumber + "/6");
+        holder.questionText.setText((CharSequence) quizItemViewPager.questionText + "?");
+        holder.radioButton1.setText("A) " + (CharSequence) quizItemViewPager.radioButton1);
+        holder.radioButton2.setText("B) " + (CharSequence) quizItemViewPager.radioButton2);
+        holder.radioButton3.setText("C) " + (CharSequence) quizItemViewPager.radioButton3);
     }
 
     @Override
@@ -42,6 +43,7 @@ public class QuizItemVPAdapter extends RecyclerView.Adapter<QuizItemVPAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView questionNumber;
         TextView questionText;
         RadioButton radioButton1;
         RadioButton radioButton2;
@@ -49,6 +51,7 @@ public class QuizItemVPAdapter extends RecyclerView.Adapter<QuizItemVPAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            questionNumber = itemView.findViewById(R.id.questionNum);
             questionText = itemView.findViewById(R.id.questionText);
             radioButton1 = itemView.findViewById(R.id.radioButton);
             radioButton2 = itemView.findViewById(R.id.radioButton2);
