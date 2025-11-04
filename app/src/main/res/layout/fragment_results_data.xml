@@ -6,17 +6,25 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/item_number"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="1"
+        android:text="10/24"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/content"
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Placeholder text" />
+        android:text="3:34" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="Grade" />
 
 </LinearLayout>

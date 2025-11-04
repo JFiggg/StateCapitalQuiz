@@ -37,7 +37,7 @@ public class QuizFragment extends Fragment {
      *
      * @return A new instance of fragment QuizFragment.
      */
-    public static QuizFragment newInstance(String param1, String param2) {
+    public static QuizFragment newInstance() {
         QuizFragment fragment = new QuizFragment();
         return fragment;
     }
@@ -52,35 +52,37 @@ public class QuizFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPager = getView().findViewById(R.id.viewPager);
+        viewPager = view.findViewById(R.id.viewPager);
         ArrayList<Integer> randomIds = getRandomIds();
+        Log.d("DEBUG", "Random IDs: " + randomIds.toString());
         ArrayList<String> randomStates = getStates(randomIds);
+        Log.d("DEBUG", "Random States: " + randomStates.toString());
         ArrayList<ArrayList<String>> capitalAnswers = getCapitals(randomIds);
+        Log.d("DEBUG", "Capital Answers: " + capitalAnswers.toString());
+
 
         quizItemViewPagerArrayList = new ArrayList<>();
 
         for (int i = 0; i < randomIds.size(); i++) {
-            Log.d("DEBUG", "randomStates: " + randomStates.get(i));
             QuizItemViewPager quizItemViewPager = new QuizItemViewPager(i+1, randomStates.get(i), capitalAnswers.get(i).get(0), capitalAnswers.get(i).get(1), capitalAnswers.get(i).get(2) );
             quizItemViewPagerArrayList.add(quizItemViewPager);
         }
+        quizItemViewPagerArrayList.add(new ScoreItemViewPager(87));
 
 
-        QuizItemVPAdapter quizItemVPAdapter = new QuizItemVPAdapter(quizItemViewPagerArrayList);
+        QuizItemVPAdapter quizItemVPAdapter = new QuizItemVPAdapter(quizItemViewPagerArrayList, getParentFragmentManager());
         viewPager.setAdapter(quizItemVPAdapter);
         viewPager.setClipToPadding(false);
         viewPager.setClipChildren(false);
         viewPager.setOffscreenPageLimit(2);
         viewPager.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
 
-
-
     }
 
     private ArrayList<Integer> getRandomIds() {
         ArrayList<Integer> randomIds = new ArrayList<>();
         while (randomIds.size() != 6) {
-            int numToAdd = (int) Math.floor(Math.random() * 50);
+            int numToAdd = (int) Math.floor(Math.random() * 50) + 1;
             if (randomIds.contains(numToAdd)){
                 continue;
             } else {

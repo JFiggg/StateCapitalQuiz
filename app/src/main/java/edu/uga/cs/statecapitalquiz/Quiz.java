@@ -1,6 +1,9 @@
 package edu.uga.cs.statecapitalquiz;
 
+import java.sql.Time;
+import java.util.Locale;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * This class represents a single capital quiz(POJO), including the id, capital name,
@@ -9,24 +12,26 @@ import java.util.Date;
  * the db table's primary key value, if it has been persisted.
  */
 public class Quiz {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
     private int id;
     private Date date;
+    private String time;
     private int result;
-    private int questionsAnswered;
 
     public Quiz()
     {
         this.id = -1;
         this.date = null;
+        this.time = "";
         this.result = -1;
-        this.questionsAnswered = -1;
     }
 
-    public Quiz(Date date, int result, int questionsAnswered ) {
+    public Quiz(Date date, int result, String time ) {
         this.date = date;
+        this.time = time;
         this.result = result;
-        this.questionsAnswered = questionsAnswered;
     }
 
     public int getId() {
@@ -50,10 +55,11 @@ public class Quiz {
         this.result = result;
     }
 
-    public int getQuestionsAnswered() {
-        return questionsAnswered;
+    public String getTime() {
+        return time;
     }
-    public void setQuestionsAnswered(int setQuestionsAnswered) {
-        this.questionsAnswered = setQuestionsAnswered;
+    public void setTime() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        this.time = timeFormat.format(new Date());
     }
 }

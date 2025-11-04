@@ -2,6 +2,7 @@ package edu.uga.cs.statecapitalquiz;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -9,7 +10,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * This is a SQLiteOpenHelper class, which Android uses to create, upgrade, delete an SQLite database
@@ -24,7 +28,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     private static final String DEBUG_TAG = "CapitalQuizDBHelper";
 
     private static final String DB_NAME = "state_capital_quiz.db";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
     private final Context context;
 
     // Define all names (strings) for tables.
@@ -36,7 +40,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     public static final String QUIZZES_COLUMN_ID = "_id";
     public static final String QUIZZES_COLUMN_DATE = "date";
     public static final String QUIZZES_COLUMN_RESULTS = "results";
-    public static final String QUIZZES_COLUMN_QUESTIONS_ANSWERED = "questions_answered";
+    public static final String QUIZZES_COLUMN_TIME = "time";
 
     // Question Table Columns
     public static final String QUESTIONS_COLUMN_ID = "_id";
@@ -61,8 +65,8 @@ public class QuizDBHelper extends SQLiteOpenHelper {
             "create table " + TABLE_QUIZZES + " ("
                     + QUIZZES_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + QUIZZES_COLUMN_DATE + " TEXT, "
-                    + QUIZZES_COLUMN_RESULTS + " TEXT, "
-                    + QUIZZES_COLUMN_QUESTIONS_ANSWERED + " TEXT"
+                    + QUIZZES_COLUMN_TIME+ " TEXT, "
+                    + QUIZZES_COLUMN_RESULTS + " TEXT "
                     + ")";
 
     private static final String CREATE_QUESTIONS =
@@ -125,19 +129,56 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZZES + " upgraded" );
     }
 
-    void addQuiz(Date date, int result, int questionsAnswered) {
+    public void insertQuiz(Quiz quiz) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        ContentValues values = new ContentValues();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        cv.put("QUIZZES_COLUMN_DATE", date.toString());
-        cv.put("QUIZZES_COLUMN_RESULTS", result);
-        cv.put("QUIZZES_COLUMN_QUESTIONS_ANSWERED", questionsAnswered);
-        long result1 = db.insert(TABLE_QUIZZES, null, cv);
-        if (result1 == -1) {
-            Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+        values.put(QUIZZES_COLUMN_DATE, dateFormat.format(quiz.getDate()));
+        values.put(QUIZZES_COLUMN_TIME, quiz.getTime());
+        values.put(QUIZZES_COLUMN_RESULTS, quiz.getResult());
+
+        db.insert("quizzes", null, values);
+        db.close();
+    }
+
+    public ArrayList<Quiz> getAllQuizzes() {
+        ArrayList<Quiz> quizList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT _id, date, time, results FROM " + TABLE_QUIZZES, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+                String dateStr = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                String time = cursor.getString(cursor.getColumnIndexOrThrow("time"));
+                String resultStr = cursor.getString(cursor.getColumnIndexOrThrow("results")); // TEXT column
+
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                    Date date = dateFormat.parse(dateStr);
+
+                    // If your Quiz constructor uses int result, parse it
+                    int result = 0;
+                    try {
+                        result = Integer.parseInt(resultStr);
+                    } catch (NumberFormatException ignored) {}
+
+                    Quiz quiz = new Quiz(date, result, time);
+                    quiz.setId(id);
+                    quizList.add(quiz);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } while (cursor.moveToNext());
         }
 
+        cursor.close();
+        db.close();
+        return quizList;
     }
+
+
 }
